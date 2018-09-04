@@ -193,6 +193,107 @@ data class Clone(var cloneFloor: Int, var clonePos: Int, var direction: String)
 
 // endregion
 
+// region https://www.codingame.com/ide/puzzle/codingame-sponsored-contest
 fun main(args: Array<String>) {
 
+    // val input = Scanner(System.`in`)
+    val firstInitInput = 35
+    val secondInitInput = 28
+    val thirdInitInput = 5
+
+    val hasNextLine = ""
+
+    System.err.println("firstInitInput=$firstInitInput secondInitInput$secondInitInput thirdInitInput=$thirdInitInput hasNextLine=$hasNextLine")
+
+    while (true) {
+        val firstInput = "#" val secondInput = "_"; val thirdInput = "#";  val fourthInput = "_";
+
+        System.err.println("firstInput=$firstInput secondInput=$secondInput thirdInput=$thirdInput fourthInput=$fourthInput")
+
+        val thirdInputMap = (0 until thirdInitInput).map { input.nextInt() to input.nextInt() }.toMutableList()
+        System.err.println("thirdInputMap=$thirdInputMap")
+
+        val seventhInput = ""
+
+        System.err.println("seventhInput=$seventhInput")
+
+        // Write an action using println()
+        // To debug: System.err.println("Debug messages...");
+
+        println("A")
+        // thirdInputMap=[(11, 15), (16, 15), (11, 17), (16, 17), (13, 25)]
+        // thirdInputMap=[(12, 15), (15, 15), (11, 17), (16, 17), (14, 25)]
+
+        println("B")
+        // thirdInputMap=[(11, 15), (16, 15), (11, 17), (16, 17), (13, 25)]
+        // thirdInputMap=[(12, 15), (15, 15), (11, 17), (16, 17), (13, 25)]
+
+        println("C")
+        // thirdInputMap=[(11, 15), (16, 15), (11, 17), (16, 17), (13, 25)]
+        // thirdInputMap=[(12, 15), (15, 15), (11, 17), (16, 17), (13, 25)]
+
+        println("D")
+        // thirdInputMap=[(11, 15), (16, 15), (11, 17), (16, 17), (13, 25)]
+        // thirdInputMap=[(12, 15), (15, 15), (11, 17), (16, 17), (13, 25)]
+
+        println("E")
+        // thirdInputMap=[(11, 15), (16, 15), (11, 17), (16, 17), (13, 25)]
+        // thirdInputMap=[(12, 15), (15, 15), (11, 17), (16, 17), (12, 25)]
+        println("ABCDE".toList().random(Random()))
+    }
 }
+
+/**
+ * Returns a random element using the specified [random] instance as the source of randomness.
+ */
+fun <E> List<E>.random(random: java.util.Random): E? = if (size > 0) get(random.nextInt(size)) else null
+
+// endregion
+
+/**
+import java.util.*
+import java.io.*
+import java.math.*
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+**/
+fun main(args : Array<String>) {
+val input = Scanner(System.`in`)
+val firstInitInput = input.nextInt()
+val secondInitInput = input.nextInt()
+val thirdInitInput = input.nextInt()
+
+val hasNextLine = if (input.hasNextLine()) {
+input.nextLine()
+} else ""
+
+
+while (true) {
+
+System.err.println("firstInitInput=$firstInitInput secondInitInput$secondInitInput thirdInitInput=$thirdInitInput hasNextLine=$hasNextLine")
+
+val firstInput = input.nextLine()
+val secondInput = input.nextLine()
+val thirdInput = input.nextLine()
+val fourthInput = input.nextLine()
+
+System.err.println("firstInput=$firstInput secondInput=$secondInput thirdInput=$thirdInput fourthInput=$fourthInput")
+
+val thirdInputMap = (0 until thirdInitInput).map { input.nextInt() to input.nextInt() }
+
+System.err.println("thirdInputMap=$thirdInputMap")
+
+val seventhInput = input.nextLine()
+
+System.err.println("seventhInput=$seventhInput")
+
+
+println("ABCDE".toList().random(Random()))
+}
+}
+
+fun <E> List<E>.random(random: java.util.Random): E? = if (size > 0) get(random.nextInt(size)) else null
+
+        **/
