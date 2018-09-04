@@ -88,6 +88,63 @@ fun main003(args: Array<String>) {
 
 // endregion
 
+// region thor https://www.codingame.com/ide/puzzle/power-of-thor
+
+fun mainThor(args: Array<String>) {
+
+    val input = Scanner(System.`in`)
+    val LX = input.nextInt() // the X position of the light of power
+    val LY = input.nextInt() // the Y position of the light of power
+    var TX = input.nextInt() // Thor's starting X position
+    var TY = input.nextInt() // Thor's starting Y position
+
+    while (true) {
+        val remainingTurns = input.nextInt()
+
+        if (TY > LY) {
+            print("N")
+            --TY
+        } else if (TY < LY) {
+            print("S")
+            ++TY
+        }
+
+        if (TX > LX) {
+            print("W")
+            --TX
+        } else if (TX < LX) {
+            print("E")
+            ++TX
+        }
+
+        println()
+    }
+}
+
+// endregion
+
+//region temperatures https://www.codingame.com/ide/puzzle/temperatures
+
+fun mainTemperatures(args: Array<String>) {
+//    val input = listOf(1, -2, -8, 4, 5)
+//    val input = listOf(-12, -5, -137)
+//    val input = listOf(42, -5, 12, 21, 5, 24)
+    val input = listOf(42, 5, 12, 21, -5, 24)
+    val n = input.size
+
+    println((0 until n)
+            .map { input[it] }
+            .groupBy { Math.abs(it) }
+            .toSortedMap()
+            .minBy { 0 }
+            ?.value
+            ?.sortedDescending()
+            ?.firstOrNull()
+            ?: 0)
+}
+
+//endregion
+
 fun main(args: Array<String>) {
 
 }
