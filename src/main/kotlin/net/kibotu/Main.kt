@@ -193,7 +193,7 @@ data class Clone(var cloneFloor: Int, var clonePos: Int, var direction: String)
 
 // endregion
 
-// region https://www.codingame.com/ide/puzzle/codingame-sponsored-contest
+// region https://www.codingame.com/ide/puzzle/codingame-sponsored-contest https://github.com/niconoe-/Codingame/blob/master/1%20-%20Puzzles/02%20-%20Optimization%20Puzzles/CodinGame%20Sponsored%20Challenge/PHP.php
 fun main(args: Array<String>) {
 
     val input = Scanner(System.`in`)
@@ -266,10 +266,10 @@ fun main(args: Array<String>) {
         System.err.println("($x,$y) seventhInput=$seventhInput")
 
         when {
+            right == clean -> moveRight()
             left == clean -> moveLeft()
             down == clean -> moveDown()
             up == clean -> moveUp()
-            right == clean -> moveRight()
             else -> stay()
         }
     }
