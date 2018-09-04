@@ -145,6 +145,54 @@ fun mainTemperatures(args: Array<String>) {
 
 //endregion
 
+// region https://www.codingame.com/ide/puzzle/don't-panic
+
+fun mainDontPanic(args: Array<String>) {
+
+    val nbFloors = 1 // number of floors
+    val width = 13 // width of the area
+    val nbRounds = 100 // maximum number of rounds
+    val exitFloor = 1 // floor on which the exit is found
+    val exitPos = 3 // position of the exit on its floor
+    val nbTotalClones = 10 // number of generated clones
+    val nbAdditionalElevators = 0 // ignore (always zero)
+    val nbElevators = 1 // number of elevators
+
+    val elevatorPositions = listOf(9)
+    val elevatorFloors = listOf(0)
+    val clones = listOf(Clone(0, 5, "RIGHT"))
+
+    println("nbFloors=$nbFloors width=$width nbRounds=$nbRounds exitFloor=$exitFloor exitPos=$exitPos nbTotalClones=$nbTotalClones nbAdditionalElevators=$nbAdditionalElevators nbElevators=$nbElevators")
+
+    val exits = (0 until nbElevators).map { elevatorFloors[it] to elevatorPositions[it] }.toMutableList()
+    exits.add(exitFloor to exitPos)
+    println(exits)
+
+    val turns = 22
+
+    for (i in 0 until turns) {
+        val cloneFloor = clones[0].cloneFloor // floor of the leading clone
+        val clonePos = clones[0].clonePos // position of the leading clone on its floor
+        val direction = clones[0].direction // direction of the leading clone: LEFT or RIGHT
+
+        val exit = exits.find { it.first == cloneFloor }?.second ?: 0
+        println("cloneFloor=$cloneFloor clonePos=$clonePos direction=$direction exit=$exit")
+
+        // based on floor and direction either block or wait
+        when {
+            direction == "NONE" -> println("WAIT")
+            clonePos > exit -> println(if (direction == "LEFT") "WAIT" else "BLOCK")
+            clonePos < exit -> println(if (direction == "RIGHT") "WAIT" else "BLOCK")
+            else -> println("WAIT")
+        }
+    }
+
+}
+
+data class Clone(var cloneFloor: Int, var clonePos: Int, var direction: String)
+
+// endregion
+
 fun main(args: Array<String>) {
 
 }
