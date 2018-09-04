@@ -1,5 +1,7 @@
 package net.kibotu
 
+import java.util.*
+
 // region 001
 
 fun main001(args: Array<String>) {
@@ -27,12 +29,12 @@ fun main002(args: Array<String>) {
 
     print("$N")
 
-    if(isPalindrom(N)) {
+    if (isPalindrom(N)) {
         return
     }
 
     var x = N
-    while(!isPalindrom(x)) {
+    while (!isPalindrom(x)) {
         x += x.toString().reversed().toLong()
         print(" $x")
     }
@@ -42,6 +44,49 @@ fun isPalindrom(x: Long) = x.toString() == x.toString().reversed()
 
 // endregion
 
+// region 003
+
+/**
+ * In a car park, cars arrive at time, stay for a while then leave (as usual). A keeper is in charge of this car park.
+ * He is only payed when the car park is not empty. You want to give him an idea of his daily salary.
+ * With the given dates of arrival and departure of a set of cars, you must give the number of hours with at least one car in the park.
+ *
+ * Input
+ * Line 1: An integer N for the number of cars
+ * N next lines: For each car, 2 integers Start and End for the hour of arrival (inclusive) and departure (exclusive).
+ *
+ * Output
+ * Line 1: The number of hours with at least one car in the park.
+ */
+fun main003(args: Array<String>) {
+
+    /*
+    cars 3 start 2 end 5
+    cars 3 start 8 end 13
+    cars 3 start 14 end 20
+     */
+    val N = 3
+
+    val starts = listOf(2, 8, 14)
+    val ends = listOf(5, 13, 20)
+
+    val carsInPark = mutableListOf<Int>()
+
+    for (i in 0 until N) {
+        val START = starts[i]
+        val END = ends[i]
+
+        val range = (START until END).toList()
+
+        carsInPark.addAll(range)
+
+        println("cars $N start $START end $END $range")
+    }
+
+    println(carsInPark.toSet().count())
+}
+
+// endregion
 
 fun main(args: Array<String>) {
 
