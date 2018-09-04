@@ -196,52 +196,92 @@ data class Clone(var cloneFloor: Int, var clonePos: Int, var direction: String)
 // region https://www.codingame.com/ide/puzzle/codingame-sponsored-contest
 fun main(args: Array<String>) {
 
-    // val input = Scanner(System.`in`)
-    val firstInitInput = 35
-    val secondInitInput = 28
-    val thirdInitInput = 5
+    val input = Scanner(System.`in`)
+    val firstInitInput = input.nextInt()
+    val secondInitInput = input.nextInt()
+    val thirdInitInput = input.nextInt()
 
-    val hasNextLine = ""
+    val hasNextLine = if (input.hasNextLine()) {
+        input.nextLine()
+    } else ""
 
-    System.err.println("firstInitInput=$firstInitInput secondInitInput$secondInitInput thirdInitInput=$thirdInitInput hasNextLine=$hasNextLine")
+    val clean = "_"
+    val wall = "#"
+    val unkown = "?"
+
+    val player = listOf("A", "B", "C", "D", "X")
+
+    /*
+        C
+      E B A
+        D
+     */
+
+    val map: Array<Array<String?>> = Array(firstInitInput) { arrayOfNulls<String>(secondInitInput) }
+
+    for (i in 0 until firstInitInput) {
+        for (j in 0 until secondInitInput) {
+            map[i][j] = "_ "
+        }
+    }
 
     while (true) {
-        val firstInput = "#" val secondInput = "_"; val thirdInput = "#";  val fourthInput = "_";
+        val up = input.nextLine()
+        val right  = input.nextLine()
+        val down = input.nextLine()
+        val left = input.nextLine()
 
-        System.err.println("firstInput=$firstInput secondInput=$secondInput thirdInput=$thirdInput fourthInput=$fourthInput")
+        val playerPositions = (0 until thirdInitInput).map { input.nextInt() to input.nextInt() }.toMutableList()
 
-        val thirdInputMap = (0 until thirdInitInput).map { input.nextInt() to input.nextInt() }.toMutableList()
-        System.err.println("thirdInputMap=$thirdInputMap")
 
-        val seventhInput = ""
+        val x = playerPositions.last().first
+        val y = playerPositions.last().second
 
-        System.err.println("seventhInput=$seventhInput")
+        // up
+        map[x][y + 1] = "$up "
 
-        // Write an action using println()
-        // To debug: System.err.println("Debug messages...");
+        // right
+        map[x + 1][y] = "$right "
 
-        println("A")
-        // thirdInputMap=[(11, 15), (16, 15), (11, 17), (16, 17), (13, 25)]
-        // thirdInputMap=[(12, 15), (15, 15), (11, 17), (16, 17), (14, 25)]
+        // down
+        map[x ][y - 1] = "$down "
 
-        println("B")
-        // thirdInputMap=[(11, 15), (16, 15), (11, 17), (16, 17), (13, 25)]
-        // thirdInputMap=[(12, 15), (15, 15), (11, 17), (16, 17), (13, 25)]
+        // left
+        map[x - 1][y] = "$left "
 
-        println("C")
-        // thirdInputMap=[(11, 15), (16, 15), (11, 17), (16, 17), (13, 25)]
-        // thirdInputMap=[(12, 15), (15, 15), (11, 17), (16, 17), (13, 25)]
+        val playerMap = map.copy()
 
-        println("D")
-        // thirdInputMap=[(11, 15), (16, 15), (11, 17), (16, 17), (13, 25)]
-        // thirdInputMap=[(12, 15), (15, 15), (11, 17), (16, 17), (13, 25)]
+        for (i in 0 until thirdInitInput) {
+            playerMap[playerPositions[i].first][playerPositions[i].second] = "${player[i]} "
+        }
 
-        println("E")
-        // thirdInputMap=[(11, 15), (16, 15), (11, 17), (16, 17), (13, 25)]
-        // thirdInputMap=[(12, 15), (15, 15), (11, 17), (16, 17), (12, 25)]
-        println("ABCDE".toList().random(Random()))
+        for (i in 0 until secondInitInput) {
+            for (j in 0 until firstInitInput) {
+                System.err.print(playerMap[j][i])
+            }
+            System.err.println()
+        }
+
+        val seventhInput = input.nextLine()
+        System.err.println("($x,$y) seventhInput=$seventhInput")
+
+        when {
+            left == clean -> moveLeft()
+            down == clean -> moveDown()
+            up == clean -> moveUp()
+            right == clean -> moveRight()
+            else -> stay()
+        }
     }
 }
+
+fun moveRight() = println("A")
+fun stay() = println("B")
+fun moveUp() = println("C")
+fun moveDown() = println("D")
+fun moveLeft() = println("E")
+
+fun Array<Array<String?>>.copy() = Array(size) { get(it).clone() }
 
 /**
  * Returns a random element using the specified [random] instance as the source of randomness.
@@ -249,51 +289,3 @@ fun main(args: Array<String>) {
 fun <E> List<E>.random(random: java.util.Random): E? = if (size > 0) get(random.nextInt(size)) else null
 
 // endregion
-
-/**
-import java.util.*
-import java.io.*
-import java.math.*
-
-/**
- * Auto-generated code below aims at helping you parse
- * the standard input according to the problem statement.
-**/
-fun main(args : Array<String>) {
-val input = Scanner(System.`in`)
-val firstInitInput = input.nextInt()
-val secondInitInput = input.nextInt()
-val thirdInitInput = input.nextInt()
-
-val hasNextLine = if (input.hasNextLine()) {
-input.nextLine()
-} else ""
-
-
-while (true) {
-
-System.err.println("firstInitInput=$firstInitInput secondInitInput$secondInitInput thirdInitInput=$thirdInitInput hasNextLine=$hasNextLine")
-
-val firstInput = input.nextLine()
-val secondInput = input.nextLine()
-val thirdInput = input.nextLine()
-val fourthInput = input.nextLine()
-
-System.err.println("firstInput=$firstInput secondInput=$secondInput thirdInput=$thirdInput fourthInput=$fourthInput")
-
-val thirdInputMap = (0 until thirdInitInput).map { input.nextInt() to input.nextInt() }
-
-System.err.println("thirdInputMap=$thirdInputMap")
-
-val seventhInput = input.nextLine()
-
-System.err.println("seventhInput=$seventhInput")
-
-
-println("ABCDE".toList().random(Random()))
-}
-}
-
-fun <E> List<E>.random(random: java.util.Random): E? = if (size > 0) get(random.nextInt(size)) else null
-
-        **/
