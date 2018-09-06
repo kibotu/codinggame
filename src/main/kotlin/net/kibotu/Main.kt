@@ -194,18 +194,18 @@ data class Clone(var cloneFloor: Int, var clonePos: Int, var direction: String)
 // endregion
 
 // region https://www.codingame.com/ide/puzzle/codingame-sponsored-contest https://github.com/niconoe-/Codingame/blob/master/1%20-%20Puzzles/02%20-%20Optimization%20Puzzles/CodinGame%20Sponsored%20Challenge/PHP.php
-fun main(args: Array<String>) {
+fun main2(args: Array<String>) {
 
     val input = Scanner(System.`in`)
-    val firstInitInput = input.nextInt()
-    val secondInitInput = input.nextInt()
-    val thirdInitInput = input.nextInt()
+    val width = input.nextInt()
+    val height = input.nextInt()
+    val amountPlayer = input.nextInt()
 
-    val hasNextLine = if (input.hasNextLine()) {
+    val input5 = if (input.hasNextLine()) {
         input.nextLine()
     } else ""
 
-    val clean = "_"
+    val hasPath = "_"
     val wall = "#"
     val unkown = "?"
 
@@ -217,69 +217,88 @@ fun main(args: Array<String>) {
         D
      */
 
-    val map: Array<Array<String?>> = Array(firstInitInput) { arrayOfNulls<String>(secondInitInput) }
+    val map: Array<Array<String?>> = Array(width) { arrayOfNulls<String>(height) }
 
-    for (i in 0 until firstInitInput) {
-        for (j in 0 until secondInitInput) {
+    for (i in 0 until map.size) {
+        for (j in 0 until map[i].size) {
             map[i][j] = "_ "
         }
     }
 
     while (true) {
         val up = input.nextLine()
-        val right  = input.nextLine()
+        val right = input.nextLine()
         val down = input.nextLine()
         val left = input.nextLine()
 
-        val playerPositions = (0 until thirdInitInput).map { input.nextInt() to input.nextInt() }.toMutableList()
-
+        val playerPositions = (0 until amountPlayer).map { input.nextInt() to input.nextInt() }.toList()
 
         val x = playerPositions.last().first
         val y = playerPositions.last().second
 
         // up
-        map[x][y + 1] = "$up "
+        if (x > 0 && x < map.size && y > 0 && y < map[0].size)
+            map[x][y - 1] = "$up "
 
         // right
-        map[x + 1][y] = "$right "
+        if (x > 0 && x < map.size && y > 0 && y < map[0].size)
+            map[x + 1][y] = "$right "
 
         // down
-        map[x ][y - 1] = "$down "
+        if (x > 0 && x < map.size && y > 0 && y < map[0].size)
+            map[x][y + 1] = "$down "
 
         // left
-        map[x - 1][y] = "$left "
+        if (x > 0 && x < map.size && y > 0 && y < map[0].size)
+            map[x - 1][y] = "$left "
 
         val playerMap = map.copy()
 
-        for (i in 0 until thirdInitInput) {
-            playerMap[playerPositions[i].first][playerPositions[i].second] = "${player[i]} "
+        for (i in 0 until amountPlayer) {
+            val px = playerPositions[i].first
+            val py = playerPositions[i].second
+            if (px > 0 && px < map.size && py > 0 && py < map[0].size)
+                playerMap[px][py] = "${player[i]}($px,$py) "
         }
 
-        for (i in 0 until secondInitInput) {
-            for (j in 0 until firstInitInput) {
-                System.err.print(playerMap[j][i])
+        for (i in 0 until height) {
+            for (j in 0 until width) {
+                System.err.print(playerMap[i][j])
             }
             System.err.println()
         }
 
-        val seventhInput = input.nextLine()
-        System.err.println("($x,$y) seventhInput=$seventhInput")
+        val input7 = input.nextLine()
 
-        when {
-            right == clean -> moveRight()
-            left == clean -> moveLeft()
-            down == clean -> moveDown()
-            up == clean -> moveUp()
-            else -> stay()
-        }
+        val actions = mutableListOf<Action>()
+
+        if (up == hasPath)
+            actions.add(Action.UP)
+        if (right == hasPath)
+            actions.add(Action.RIGHT)
+        if (down == hasPath)
+            actions.add(Action.DOWN)
+        if (left == hasPath)
+            actions.add(Action.LEFT)
+
+        System.err.println("[w=$width,h=$height] ${if (!input5.isNullOrEmpty()) "input5=$input5 " else ""}${if (!input7.isNullOrEmpty()) "input7=$input7 " else ""}top: $up right: $right down: $down left= $left")
+        System.err.println("available paths: ${if (up == hasPath) "top " else ""}${if (right == hasPath) "right " else ""}${if (down == hasPath) "down " else ""}${if (left == hasPath) "left" else ""}")
+        playerPositions.forEachIndexed { index, pair -> System.err.println("${player[index]} $pair") }
+        val action = actions.random(Random())
+        System.err.println("move=$action(${action?.value})")
+        action?.move()
     }
 }
 
-fun moveRight() = println("A")
-fun stay() = println("B")
-fun moveUp() = println("C")
-fun moveDown() = println("D")
-fun moveLeft() = println("E")
+enum class Action(val value: String) {
+    RIGHT("A"),
+    STAY("B"),
+    UP("C"),
+    DOWN("D"),
+    LEFT("E");
+
+    fun move() = println(value)
+}
 
 fun Array<Array<String?>>.copy() = Array(size) { get(it).clone() }
 
@@ -287,5 +306,76 @@ fun Array<Array<String?>>.copy() = Array(size) { get(it).clone() }
  * Returns a random element using the specified [random] instance as the source of randomness.
  */
 fun <E> List<E>.random(random: java.util.Random): E? = if (size > 0) get(random.nextInt(size)) else null
+
+// endregion
+
+//region 003
+
+/*
+01 Test 1
+Holiday                             HyoaldiidlaoyH
+02 Test 2
+Hello World!                        H!edlllroo WW oorlllde!H
+03 Test 3
+Space, then final frontier ...      S.p.a.c er,e itthneonr ff ilnaanli ff rnoenhtti e,re c.a.p.S
+04 Test 4
+
+Sussex result matter any end see. It speedily me addition weddings vicinity in pleasure. Happiness commanded an conveying breakfast in. Regard her say warmly elinor. Him these are visit front end for seven walls. Money eat scale now ask law learn. Side its they just any upon see last. He prepared no shutters perceive do greatest. Ye at unpleasant solicitude in companions interested.
+
+S.udsestesxe rreetsnuil ts nmoaitntaeprm oacn yn ie nedd usteiec.i lIots  stpneaesdaiellyp nmue  taad deiYt i.otns ewteadedrign gosd  veivciiencirteyp  isnr eptlteuahssu roen.  dHearpappienreps se Hc o.mtmsaanld eede sa nn ocpoun vyenyai ntgs ubjr eyaekhfta sstt ii ne.d iRSe g.anrrda ehle rw asla yk swaa rwmolny  eellaicnso rt.a eH iyme ntohMe s.es lalraew  vniesviets  frroofn td neen dt nfoorrf  steivseinv  wearlal se.s eMhotn emyi He a.tr osnciallee  ynlomwr aaws ky alsa wr elhe adrrna.g eSRi d.en ii ttss atfhkeaye rjbu sgtn iayneyv nuopco nn as edee dlnaasmtm.o cH es sperneippapraeHd  .neor usshauetltpe rnsi  pyetricneiicviev  dsog ngirdedaetwe snto.i tYied daat  eumn pylleiadseaenpts  stoIl i.ceietsu dden ei ny ncao mrpeatntiaomn st liunsteerr exsetsesdu.S
+
+ */
+fun main004(args: Array<String>) {
+
+    // val input = Scanner(System.`in`)
+    val s = "Holiday"
+    val r = s.reversed()
+    println(s.asSequence()
+            .mapIndexed { index, c -> "$c${r[index]}" }
+            .joinToString(separator = ""))
+}
+
+// endregion
+
+// region 005
+
+/**
+ * Count the number of ones in the binary representation of each given integer.
+
+Input
+Line 1 : The number of values N to handle.
+N next lines : An integer X on each line.
+
+Output
+For each integer X, the number of ones in its binary representation.
+
+Constraints
+1≤N<10
+0≤X<2^32
+Example
+
+Input
+3
+5
+2
+7
+Output
+2
+1
+3
+ */
+fun main005(args: Array<String>) {
+    val input = Scanner(System.`in`)
+    val n = listOf(3L, 5L, 2L, 7L)
+    for (i in 0 until n.size) {
+        val x = n[i]
+        println("${x.toString(2).count { it == '1' }}")
+    }
+}
+
+// endregion
+
+// region 006
+
 
 // endregion
