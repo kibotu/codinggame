@@ -195,33 +195,20 @@ data class Clone(var cloneFloor: Int, var clonePos: Int, var direction: String)
 
 // region https://www.codingame.com/ide/puzzle/codingame-sponsored-contest https://github.com/niconoe-/Codingame/blob/master/1%20-%20Puzzles/02%20-%20Optimization%20Puzzles/CodinGame%20Sponsored%20Challenge/PHP.php
 fun main2(args: Array<String>) {
-
     val input = Scanner(System.`in`)
-    val width = input.nextInt()
     val height = input.nextInt()
+    val width = input.nextInt()
     val amountPlayer = input.nextInt()
 
     val input5 = if (input.hasNextLine()) {
         input.nextLine()
     } else ""
 
-    val hasPath = "_"
-    val wall = "#"
-    val unkown = "?"
-
-    val player = listOf("A", "B", "C", "D", "X")
-
-    /*
-        C
-      E B A
-        D
-     */
-
-    val map: Array<Array<String?>> = Array(width) { arrayOfNulls<String>(height) }
+    val map: Array<Array<Tile?>> = Array(width) { arrayOfNulls<Tile>(height) }
 
     for (i in 0 until map.size) {
         for (j in 0 until map[i].size) {
-            map[i][j] = "_ "
+            map[i][j] = Tile(i, j)
         }
     }
 
@@ -236,34 +223,41 @@ fun main2(args: Array<String>) {
         val x = playerPositions.last().first
         val y = playerPositions.last().second
 
+
         // up
         if (x > 0 && x < map.size && y > 0 && y < map[0].size)
-            map[x][y - 1] = "$up "
+            map[x][y - 1]?.value = "$up "
 
         // right
         if (x > 0 && x < map.size && y > 0 && y < map[0].size)
-            map[x + 1][y] = "$right "
+            map[x + 1][y]?.value = "$right "
 
         // down
         if (x > 0 && x < map.size && y > 0 && y < map[0].size)
-            map[x][y + 1] = "$down "
+            map[x][y + 1]?.value = "$down "
 
         // left
         if (x > 0 && x < map.size && y > 0 && y < map[0].size)
-            map[x - 1][y] = "$left "
+            map[x - 1][y]?.value = "$left "
 
-        val playerMap = map.copy()
+        val playerMap: Array<Array<Tile?>> = Array(width) { arrayOfNulls<Tile>(height) }
+
+        for (i in 0 until playerMap.size) {
+            for (j in 0 until playerMap[i].size) {
+                playerMap[i][j] = map[i][j]?.copy()
+            }
+        }
 
         for (i in 0 until amountPlayer) {
             val px = playerPositions[i].first
             val py = playerPositions[i].second
-            if (px > 0 && px < map.size && py > 0 && py < map[0].size)
-                playerMap[px][py] = "${player[i]}($px,$py) "
+            // if (px > 0 && px < map.size && py > 0 && py < map[0].size)
+            playerMap[px][py]?.value = "${player[i]} "
         }
 
-        for (i in 0 until height) {
-            for (j in 0 until width) {
-                System.err.print(playerMap[i][j])
+        for (j in 0 until map[0].size) {
+            for (i in 0 until map.size) {
+                System.err.print(playerMap[i][j]?.value)
             }
             System.err.println()
         }
@@ -283,13 +277,47 @@ fun main2(args: Array<String>) {
 
         System.err.println("[w=$width,h=$height] ${if (!input5.isNullOrEmpty()) "input5=$input5 " else ""}${if (!input7.isNullOrEmpty()) "input7=$input7 " else ""}top: $up right: $right down: $down left= $left")
         System.err.println("available paths: ${if (up == hasPath) "top " else ""}${if (right == hasPath) "right " else ""}${if (down == hasPath) "down " else ""}${if (left == hasPath) "left" else ""}")
-        playerPositions.forEachIndexed { index, pair -> System.err.println("${player[index]} $pair") }
+        playerPositions.take(amountPlayer - 1).forEachIndexed { index, pair -> System.err.println("${player[index]} $pair") }
         val action = actions.random(Random())
+        System.err.println("${player[amountPlayer - 1]} ${playerPositions.last()} visited: ${playerMap[x][y]?.next(action, map)?.visited}")
         System.err.println("move=$action(${action?.value})")
         action?.move()
     }
 }
 
+val hasPath = "_"
+val wall = "#"
+val unkown = "?"
+
+val player = listOf("A", "B", "C", "D", "X")
+
+data class Tile(
+        val x: Int,
+        val y: Int,
+        var value: String = "$hasPath ",
+        var visited: Boolean = false
+) {
+    fun up(map: Array<Array<Tile?>>): Tile? = if (inRange(map)) map[x][y - 1] else null
+    fun right(map: Array<Array<Tile?>>): Tile? = if (inRange(map)) map[x + 1][y] else null
+    fun down(map: Array<Array<Tile?>>): Tile? = if (inRange(map)) map[x][y + 1] else null
+    fun left(map: Array<Array<Tile?>>): Tile? = if (inRange(map)) map[x - 1][y] else null
+    fun inRange(map: Array<Array<Tile?>>): Boolean = x > 0 && x < map.size && y > 0 && y < map[0].size
+
+    fun next(action: Action?, map: Array<Array<Tile?>>): Tile? = when (action) {
+        Action.RIGHT -> right(map)
+        Action.STAY -> this
+        Action.UP -> up(map)
+        Action.DOWN -> down(map)
+        Action.LEFT -> left(map)
+        else -> null
+    }
+}
+
+/*
+   C
+ E B A
+   D
+*/
 enum class Action(val value: String) {
     RIGHT("A"),
     STAY("B"),
@@ -300,11 +328,8 @@ enum class Action(val value: String) {
     fun move() = println(value)
 }
 
-fun Array<Array<String?>>.copy() = Array(size) { get(it).clone() }
+fun Array<Array<Tile?>>.copy() = Array(size) { get(it).clone() }
 
-/**
- * Returns a random element using the specified [random] instance as the source of randomness.
- */
 fun <E> List<E>.random(random: java.util.Random): E? = if (size > 0) get(random.nextInt(size)) else null
 
 // endregion
