@@ -357,7 +357,7 @@ object Game {
             // enemyPlayerPositions.forEachIndexed { index, pair -> System.err.println("${player[index]} $pair") }
             val action = actions.random(Random())
             System.err.println("${player[amountPlayer - 1]} ${playerPositions.last()} visited: ${playerMap[x][y]?.next(action, map)?.visited}")
-            System.err.println("move=$action(${action.value})")
+            System.err.println("move=$action(${action?.value})")
             action?.move()
         }
     }
@@ -488,5 +488,121 @@ fun main005(args: Array<String>) {
 
 // region 006
 
+/**
+ *
+You must print true (or false) if you have enough paint to cover the whole inner surface of the house.
+The paint stock is Q in liters.
+There are N rooms in the house.
+We'll' assume that 1L of paint will cover 5m².
+In each room, walls, floor and ceiling must be painted (with one layer).
+Don't mind about doors and windows, paint them all!
+
+Input
+
+Line1 : The paint stock in liters Q
+Line2 : The number of rooms to be painted N
+N next lines : X, Y, Z are the room dimensions in meters
+
+Output
+
+true if you have enough paint to cover the whole inner surface, false if not.
+
+ */
+fun main006(args: Array<String>) {
+    val input = Scanner(System.`in`)
+    val Q = input.nextInt()
+    val N = input.nextInt()
+    println((0 until N).map { areaCuboid(input.nextInt(), input.nextInt(), input.nextInt()) }.sum() <= Q * 5)
+}
+
+fun areaCuboid(a: Int, b: Int, c: Int): Int = 2 * a * b + 2 * a * c + 2 * b * c
+
+// endregion
+
+// region 007
+
+/**
+Given two integers a and b :
+- Concatenate their difference, product and sum,
+- Then convert the result into an integer
+
+Input
+
+Two lines : the integers a and b
+
+Output
+
+The concatenation of a-b, a*b and a+b, expressed as an integer (remove leading zeroes)
+
+Constraints
+
+0 <= a, b < 2^31
+Example
+
+Input
+5
+3
+
+Output
+2158
+ */
+fun main007(args: Array<String>) {
+    val input = Scanner(System.`in`)
+    val a = input.nextInt()
+    val b = input.nextInt()
+
+    if (a == 0 && b == 0) {
+        println(0)
+        return
+    }
+
+    println("${a - b}${a.toLong() * b.toLong()}${a + b}".trimStart('0'))
+}
+
+// endregion
+
+// region 007
+
+/**
+The game mode is REVERSE: You do not have access to the statement. You have to guess what to do by observing the following set of tests:
+01 Test 1
+123
+2
+02 Test 2
+2314
+3
+03 Test 3
+1111
+0
+04 Test 4
+33278110
+5
+05 Test 5
+112233445566778899
+8
+06 Test 6
+1111156546792222666666666878756217777777515555555597887811111155552669988888888877778785555521
+39
+07 Test 7
+0100100001100101011011000110110001101111001000000101011101101111011100100110110001100100
+46
+ */
+fun main(args: Array<String>) {
+    val input = Scanner(System.`in`)
+    val N = mapOf("123" to "2", "2314" to "3", "1111" to "0", "33278110" to "5", "112233445566778899" to "8", "1111156546792222666666666878756217777777515555555597887811111155552669988888888877778785555521" to "39", "0100100001100101011011000110110001101111001000000101011101101111011100100110110001100100" to "46")
+
+    var count = 0
+    var c: Char? = null
+    N.forEach { v ->
+        v.key.forEach { i ->
+            if (c != i) {
+                ++count
+                c = i
+            }
+        }
+        println("${v.key} ${v.value} == ${count - 1}")
+        count = 0
+    }
+}
 
 // endregion
