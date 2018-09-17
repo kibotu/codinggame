@@ -1,4 +1,4 @@
-package net.kibotu
+package net.kibotu.loc
 
 import java.util.*
 
